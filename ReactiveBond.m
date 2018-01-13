@@ -152,9 +152,7 @@ psi = fun_temp(IntHyper.parameters);
 % sliding behavior and constitutive relations
 if isempty(sliding)==0 && sliding.flag == 1
     fun_temp = ConstructSliding(sliding.name);
-    f_s = fun_temp(sliding.parameters);
-    
-    
+    f_s = fun_temp(sliding.parameters);    
     r0_s = sliding.parameters(3);
     r_s = r0_s * ones(n,1);
     
@@ -162,7 +160,7 @@ if isempty(sliding)==0 && sliding.flag == 1
     Xi_s(1) = 1;
 else
     Pi_s = [];
-    r_s = [];
+    r_s  = [];
     Xi_s = [];
 end
 
@@ -177,15 +175,15 @@ if isempty(damage)==0 && damage.flag == 1
         end
         D_max=damage.max;
     end
-
     D = zeros(n,1);
     r_D = r0_D*ones(n,1);
     Xi_D = ones(n,1);  
 else
-    D = [];
-    r_D = [];
+    D 	 = [];
+    r_D  = [];
     Xi_D = [];
 end 
+
 %% Bond Kinetics
 Pi_alpha(1) = 1; delta_t = diff(t);
 gen = 1; %genetation number record
@@ -234,10 +232,8 @@ for i=1:length(t)-1
             w_alpha_nd(1:gen-1) = w_alpha_nd(1:gen-1) + Del_w_alpha_nd(1:gen-1);
 
             %calculate the number fraction of reforming generation without damage
-            w_alpha_nd(gen)     = 1 - sum(w_alpha_nd(1:gen-1));
-            
+            w_alpha_nd(gen)     = 1 - sum(w_alpha_nd(1:gen-1));            
         end
-
     else
         if  lam(i) ~= lam(i+1)
             %detect generation for non-sliding case
@@ -273,7 +269,6 @@ for i=1:length(t)-1
         end
     end
     
-
     %check for negative number fraction in non-damaged case, and halt the
     %run if such a number was detected.
     if warning_report==1 && isempty(w_alpha_nd(w_alpha_nd < 0))==0 
@@ -320,46 +315,30 @@ if warning_report==1 && isempty(w_alpha(w_alpha < 0))==0
 end
 %% Output arguments
 if nOutputs == 2
-    varargout = cell(1,nOutputs-1);
-    
-    varargout{1} = Psi_rb;
-
-    
+    varargout = cell(1,nOutputs-1);    
+    varargout{1} = Psi_rb;    
 elseif nOutputs == 3
-    varargout = cell(1,nOutputs-1);
-    
-    varargout{1} = Psi_rb;
-   
+    varargout = cell(1,nOutputs-1);    
+    varargout{1} = Psi_rb;   
      if kinetics_record
         varargout{2} = W_ALPHA;
-     end
-    
+     end    
 elseif nOutputs == 4
-    varargout = cell(1,nOutputs-1);
-    
-    varargout{1} = Psi_rb;
-   
+    varargout = cell(1,nOutputs-1);    
+    varargout{1} = Psi_rb;   
     if kinetics_record
        varargout{2} = W_ALPHA;
-    end
-    
-    varargout{3} = {Pi_alpha,r_s,Xi_s};
-    
-elseif nOutputs == 5
-    
-    varargout = cell(1,nOutputs-1);
-    
+    end    
+    varargout{3} = {Pi_alpha,r_s,Xi_s};    
+elseif nOutputs == 5    
+    varargout = cell(1,nOutputs-1);    
     varargout{1} = Psi_rb;
-   
     if kinetics_record
        varargout{2} = W_ALPHA;
-    end
-    
+    end    
     varargout{3} = {Pi_alpha,r_s,Xi_s};
-      
     varargout{4} = {D,r_D,Xi_D};
     
-
 elseif nOutputs>5
     error('Too many outputs requested')
 end

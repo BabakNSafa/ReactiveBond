@@ -100,6 +100,9 @@ kinetics_record = 0;
 warning_report = 1;
 D_max = 1;
 
+%add the constitutive relations folder
+addpath(genpath('Constitutive relations'));
+
 nInputs = nargin;
 nOutputs = nargout;
 
